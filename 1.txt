@@ -1,0 +1,38 @@
+board = [' ' for _ in range(9)]
+
+def print_board():
+    for i in range(3): 
+        print(f"{board[i*3]} | {board[i*3+1]} | {board[i*3+2]}")
+    if ' ' not in board:
+        print("It's a draw!")
+        exit()
+
+def check_winner(p):
+    return any(board[a] == board[b] == board[c] == p for a, b, c in [(0,1,2),(3,4,5),(6,7,8),(0,3,6),(1,4,7),(2,5,8),(0,4,8),(2,4,6)])
+
+def dfs_move(p):
+    for i in range(9):
+        if board[i] == ' ':
+            board[i] = p
+            if check_winner(p):
+                return i
+            board[i] = ' '
+    return board.index(' ')
+
+def play_game():
+    while True:
+        print_board()
+        move = int(input("Your turn (X), position (1-9): ")) - 1
+        if board[move] == ' ': 
+            board[move] = 'X'
+            if check_winner('X'):
+                print_board()
+                print("You win!")
+                break
+            board[dfs_move('O')] = 'O'
+            if check_winner('O'):
+                print_board()
+                print("O wins!")
+                break
+
+play_game()
